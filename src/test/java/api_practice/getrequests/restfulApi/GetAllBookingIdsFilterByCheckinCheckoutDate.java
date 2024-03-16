@@ -4,16 +4,14 @@ import api_practice.baseURLs.RestfulBaseURL;
 import io.restassured.response.Response;
 import org.junit.Test;
 
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class GetAllBookingIdsFilterByName extends RestfulBaseURL {
-     /*
+public class GetAllBookingIdsFilterByCheckinCheckoutDate extends RestfulBaseURL {
+    /*
     Given
-        https://restful-booker.herokuapp.com/booking?firstname=Sally&lastname=Brown
+        https://restful-booker.herokuapp.com/booking?checkin=2018-01-01&checkout=2019-01-01
     When
         Send a Get request to the URL
     Then
@@ -25,16 +23,16 @@ public class GetAllBookingIdsFilterByName extends RestfulBaseURL {
      */
 
     @Test
-    public void getAllBookingIdsFilterByName(){
+    public void getAllBookingIdsFilterByCheckinCheckoutDate(){
         //Set the URL
-        spec.pathParam("first", "booking").queryParams("firstname", "Sally", "lastname", "Brown");
+        spec.pathParam("first", "booking").queryParams("checkin", "2018-01-01", "checkout", "2019-01-01");
 
         //Set the expected data
             //There is no data given to the database by API
 
         //Send the request and get the response
         Response response = given().spec(spec).when().get("/{first}");
-        //response.prettyPrint();
+        response.prettyPrint();
 
         //Assert the response
             //Status Code should be 200
@@ -42,7 +40,6 @@ public class GetAllBookingIdsFilterByName extends RestfulBaseURL {
             //Response Body has a "bookingid" variable
         assertTrue(response.asString().contains("bookingid"));
             //Response Body has 6 records
-        List<String> bookingidList = response.jsonPath().getList("bookingid");
-        assertEquals(6, bookingidList.size());
+        assertEquals(6, response.jsonPath().getList("bookingid").size());
     }
 }
